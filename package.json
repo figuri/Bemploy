@@ -1,0 +1,18 @@
+{
+  "name": "bemploy",
+  "version": "1.0.0",
+  "description": "Employee registrar to view and edit a reactive database full of employees and info about them",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.5.2"
+  }
+}

@@ -1,0 +1,3 @@
+-- insert department data into department table
+-- insert role data into role table
+-- insert employee data into employee table
