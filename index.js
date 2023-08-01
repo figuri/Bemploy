@@ -47,3 +47,26 @@ const addNewEmployee = () => {
     // call mainMenu()
 }
 
+// const updateEmployeeRole = () => {
+//     // query database for list of employees
+//     // give list of employees to choose from
+//     // ask which employee to update
+//     // query database for list of roles
+//     // give list of roles to choose from
+//     // ask which role to update to
+//     // update employee role in database
+//     // return confirmation message
+//     // call mainMenu()
+
+// }
+
+const mainMenu = () => {
+    // ask what user wants to do
+    // call appropriate function
+}
+
+// call mainMenu()
+
+// export statements
+
+
