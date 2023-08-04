@@ -53,10 +53,22 @@ const mainMenu = () => {
 };
 const viewAllEmployees = () => {
     // query database
-    // display results
-    // show all employees
-    // call mainMenu()
-}
+    const query = `SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
+    FROM employee e
+    INNER JOIN role r ON e.role_id = r.id
+    INNER JOIN department d ON r.department_id = d.id
+    LEFT JOIN employee m ON m.id = e.manager_id`;
+    db.promise().query(query)
+    .then(([results]) => {
+        // show all employees
+        console.table(results);
+        // call mainMenu()
+        mainMenu();
+    })
+    .catch((err) => {
+        console.error('Could not find employees', err);
+      });
+};
 
 const viewAllDepartments = () => {
     // query database
