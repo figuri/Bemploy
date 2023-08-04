@@ -10,6 +10,7 @@ const db = require('./config/connection');
 // call main menu function
 
 const mainMenu = () => {
+    console.log(`inside mainMenu()`);
     // ask what user wants to do
     inquirer.prompt([
         {
@@ -47,17 +48,21 @@ const mainMenu = () => {
                 case 'Exit':
                     console.log('Goodbye!');
                     db.end();
-                    return;
-            }
+                    break;
+                }
+        })
+        .catch((err) => {
+            console.error(err);
         });
 };
 const viewAllEmployees = () => {
     // query database
-    const query = `SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
-    FROM employee e
-    INNER JOIN role r ON e.role_id = r.id
-    INNER JOIN department d ON r.department_id = d.id
-    LEFT JOIN employee m ON m.id = e.manager_id`;
+    const query = `
+        SELECT e.id, e.first_name, e.last_name, r.title, d.dep_name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager
+        FROM employee e
+        LEFT JOIN role r ON e.role_id = r.id
+        LEFT JOIN department d ON r.dep_id = d.id
+        LEFT JOIN employee m ON m.id = e.manager_id`;
     db.promise().query(query)
         .then(([results]) => {
             // show all employees
@@ -71,6 +76,7 @@ const viewAllEmployees = () => {
             mainMenu();
         });
 };
+
 
 const viewAllDepartments = () => {
     // query database
@@ -365,7 +371,4 @@ const updateEmployeeRole = () => {
 
 mainMenu();
 // call mainMenu()
-
-// export statements
-module.exports = connection;
 
