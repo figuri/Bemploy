@@ -19,37 +19,37 @@ const mainMenu = () => {
             choices: ['View All Employees', 'View All Departments', 'View All Roles', 'Add New Employee', 'Add New Department', 'Add New Role', 'Update Employee Role', 'Exit']
         }
     ])
-    .then((answer) => {
-        // switch statement to get answer
-        switch (answer.mainMenu) {
-            // call functions for each inquirer question
-            case 'View All Employees':
-                viewAllEmployees();
-                break;
-            case 'View All Departments':
-                viewAllDepartments();
-                break;
-            case 'View All Roles':
-                viewAllRoles();
-                break;
-            case 'Add New Employee':
-                addNewEmployee();
-                break;
-            case 'Add New Department':
-                addNewDepartment();
-                break;
-            case 'Add New Role':
-                addNewRole();
-                break;
-            case 'Update Employee Role':
-                updateEmployeeRole();
-                break;
-            case 'Exit':
-                console.log('Goodbye!');
-                db.end();
-                return;
-        }
-    });
+        .then((answer) => {
+            // switch statement to get answer
+            switch (answer.mainMenu) {
+                // call functions for each inquirer question
+                case 'View All Employees':
+                    viewAllEmployees();
+                    break;
+                case 'View All Departments':
+                    viewAllDepartments();
+                    break;
+                case 'View All Roles':
+                    viewAllRoles();
+                    break;
+                case 'Add New Employee':
+                    addNewEmployee();
+                    break;
+                case 'Add New Department':
+                    addNewDepartment();
+                    break;
+                case 'Add New Role':
+                    addNewRole();
+                    break;
+                case 'Update Employee Role':
+                    updateEmployeeRole();
+                    break;
+                case 'Exit':
+                    console.log('Goodbye!');
+                    db.end();
+                    return;
+            }
+        });
 };
 const viewAllEmployees = () => {
     // query database
@@ -59,16 +59,16 @@ const viewAllEmployees = () => {
     INNER JOIN department d ON r.department_id = d.id
     LEFT JOIN employee m ON m.id = e.manager_id`;
     db.promise().query(query)
-    .then(([results]) => {
-        // show all employees
-        console.table(results);
-        // call mainMenu()
-        mainMenu();
-    })
-    // catch error
-    .catch((err) => {
-        console.error('Could not find employees', err);
-      });
+        .then(([results]) => {
+            // show all employees
+            console.table(results);
+            // call mainMenu()
+            mainMenu();
+        })
+        // catch error
+        .catch((err) => {
+            console.error('Could not find employees', err);
+        });
 };
 
 const viewAllDepartments = () => {
@@ -78,13 +78,13 @@ const viewAllDepartments = () => {
         if (err) {
             console.error('Could not find departments');
         } else {
-             // show all departments
+            // show all departments
             console.table(results);
-             // call mainMenu()
+            // call mainMenu()
             mainMenu();
         }
     });
-   
+
 }
 
 const viewAllRoles = () => {
@@ -94,9 +94,9 @@ const viewAllRoles = () => {
         if (err) {
             console.error('Could not find roles');
         } else {
-                // show all roles
+            // show all roles
             console.table(results);
-                // call mainMenu()
+            // call mainMenu()
             mainMenu();
         }
     });
@@ -118,7 +118,7 @@ const addNewRole = () => {
                 }
             }
         },
-    // ask salary of role
+        // ask salary of role
         {
             type: 'input',
             name: 'roleSalary',
@@ -135,30 +135,30 @@ const addNewRole = () => {
     ]).then((answer) => {
         const { roleName, roleSalary } = answer;
         db.promise().query('SELECT id, dep_name FROM department')
-        .then(([departments]) => {
-            const departmentChoices = departments.map((dept) => ({
-                name: dept.dep_name,
-                value: dept.id,
-              }));
-            inquirer.prompt([
-                {
-                    type: 'list',
-                    name: 'departmentId',
-                    message: 'Which department does the role belong to?',
-                    choices: departmentChoices
-                },
-            ]}).then((answer) => {
-                const { departmentId } = answer;
-                db.promise().query('INSERT INTO role (title, salary, dep_id) VALUES (?, ?, ?)', [roleName, roleSalary, departmentId])
-                .then(() => {
-                    console.log('New role added!');
-                    mainMenu();
-                })
-                .catch((err) => {
-                    console.error('Could not add role', err);
+            .then(([departments]) => {
+                const departmentChoices = departments.map((dept) => ({
+                    name: dept.dep_name,
+                    value: dept.id,
+                }));
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'departmentId',
+                        message: 'Which department does the role belong to?',
+                        choices: departmentChoices
+                    },
+                ]}).then((answer) => {
+                    const { departmentId } = answer;
+                    db.promise().query('INSERT INTO role (title, salary, dep_id) VALUES (?, ?, ?)', [roleName, roleSalary, departmentId])
+                        .then(() => {
+                            console.log('New role added!');
+                            mainMenu();
+                        })
+                        .catch((err) => {
+                            console.error('Could not add role', err);
+                        });
                 });
-            });
-        });    
+    });
 };
 
 const addNewDepartment = () => {
@@ -172,22 +172,22 @@ const addNewEmployee = () => {
     // ask name of employee
     // ask role of employee
     // ask manager of employee
-        // if yes, add manager to employee
+    // if yes, add manager to employee
     // insert new employee into database
     // return confirmation message
     // call mainMenu()
 }
 
 const updateEmployeeRole = () => {
-//     // query database for list of employees
-//     // give list of employees to choose from
-//     // ask which employee to update
-//     // query database for list of roles
-//     // give list of roles to choose from
-//     // ask which role to update to
-//     // update employee role in database
-//     // return confirmation message
-//     // call mainMenu()
+    //     // query database for list of employees
+    //     // give list of employees to choose from
+    //     // ask which employee to update
+    //     // query database for list of roles
+    //     // give list of roles to choose from
+    //     // ask which role to update to
+    //     // update employee role in database
+    //     // return confirmation message
+    //     // call mainMenu()
 }
 
 mainMenu();
