@@ -140,6 +140,7 @@ const addNewRole = () => {
                     name: dept.dep_name,
                     value: dept.id,
                 }));
+                // ask which department the role belongs to
                 inquirer.prompt([
                     {
                         type: 'list',
@@ -147,7 +148,9 @@ const addNewRole = () => {
                         message: 'Which department does the role belong to?',
                         choices: departmentChoices
                     },
-                ]}).then((answer) => {
+                    // insert new role into database
+                    // return confirmation message 
+                ]).then((answer) => {
                     const { departmentId } = answer;
                     db.promise().query('INSERT INTO role (title, salary, dep_id) VALUES (?, ?, ?)', [roleName, roleSalary, departmentId])
                         .then(() => {
@@ -156,16 +159,47 @@ const addNewRole = () => {
                         })
                         .catch((err) => {
                             console.error('Could not add role', err);
+                            mainMenu();
                         });
                 });
+            });
     });
-};
+}
 
 const addNewDepartment = () => {
     // ask name of department
-    // insert new department into database
-    // return confirmation message
-    // call mainMenu()
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'departmentName',
+            message: 'What is the name of the department?',
+            validate: departmentNameInput => {
+                // validate input
+                if (departmentNameInput) {
+                    return true;
+                } else {
+                    console.log('Please enter a department name!');
+                    return false;
+                }
+            }
+        }
+    ]).then((answer) => {
+        // insert new department into database
+        const { departmentName } = answer;
+        db.promise().query('INSERT INTO department (dep_name) VALUES (?)', [departmentName])
+            .then(() => {   
+                // return confirmation message
+                console.log('New department added!');
+                    // call mainMenu()
+                mainMenu();
+            })
+            .catch((err) => {
+                console.error('Could not add department', err);
+            });
+    });
+    
+ 
+
 }
 
 const addNewEmployee = () => {
