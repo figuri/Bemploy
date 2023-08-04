@@ -68,6 +68,7 @@ const viewAllEmployees = () => {
         // catch error
         .catch((err) => {
             console.error('Could not find employees', err);
+            mainMenu();
         });
 };
 
@@ -195,6 +196,7 @@ const addNewDepartment = () => {
             })
             .catch((err) => {
                 console.error('Could not add department', err);
+                mainMenu();
             });
     });
     
