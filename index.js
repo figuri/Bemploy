@@ -65,6 +65,7 @@ const viewAllEmployees = () => {
         // call mainMenu()
         mainMenu();
     })
+    // catch error
     .catch((err) => {
         console.error('Could not find employees', err);
       });
@@ -88,21 +89,77 @@ const viewAllDepartments = () => {
 
 const viewAllRoles = () => {
     // query database
-    // display results
-    // show all roles
-    // call mainMenu()
+    var query = `SELECT * FROM role`;
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Could not find roles');
+        } else {
+                // show all roles
+            console.table(results);
+                // call mainMenu()
+            mainMenu();
+        }
+    });
 }
 
 const addNewRole = () => {
     // ask name of role
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'roleName',
+            message: 'What is the name of the role?',
+            validate: roleNameInput => {
+                if (roleNameInput) {
+                    return true;
+                } else {
+                    console.log('Please enter a role name!');
+                    return false;
+                }
+            }
+        },
     // ask salary of role
-    // query department table for list of departments
-    // give list of departments to choose from
-    // ask which department role belongs to
-    // insert new role into database
-    // return confirmation message
-    // call mainMenu()
-}
+        {
+            type: 'input',
+            name: 'roleSalary',
+            message: 'What is the salary of the role?',
+            validate: roleSalaryInput => {
+                if (roleSalaryInput) {
+                    return true;
+                } else {
+                    console.log('Please enter a role salary!');
+                    return false;
+                }
+            }
+        }
+    ]).then((answer) => {
+        const { roleName, roleSalary } = answer;
+        db.promise().query('SELECT id, dep_name FROM department')
+        .then(([departments]) => {
+            const departmentChoices = departments.map((dept) => ({
+                name: dept.dep_name,
+                value: dept.id,
+              }));
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'departmentId',
+                    message: 'Which department does the role belong to?',
+                    choices: departmentChoices
+                },
+            ]}).then((answer) => {
+                const { departmentId } = answer;
+                db.promise().query('INSERT INTO role (title, salary, dep_id) VALUES (?, ?, ?)', [roleName, roleSalary, departmentId])
+                .then(() => {
+                    console.log('New role added!');
+                    mainMenu();
+                })
+                .catch((err) => {
+                    console.error('Could not add role', err);
+                });
+            });
+        });    
+};
 
 const addNewDepartment = () => {
     // ask name of department
