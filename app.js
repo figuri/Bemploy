@@ -9,11 +9,55 @@ const db = require('./config/connection');
 // create function for main menu
 // call main menu function
 
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'employee_db'
 
-
-
+const mainMenu = () => {
+    // ask what user wants to do
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'mainMenu',
+            message: 'What would you like to do?',
+            choices: ['View All Employees', 'View All Departments', 'View All Roles', 'Add New Employee', 'Add New Department', 'Add New Role', 'Update Employee Role', 'Exit']
+        }
+    ])
+    .then((answer) => {
+        // switch statement to get answer
+        switch (answer.mainMenu) {
+            // call functions for each inquirer question
+            case 'View All Employees':
+                viewAllEmployees();
+                break;
+            case 'View All Departments':
+                viewAllDepartments();
+                break;
+            case 'View All Roles':
+                viewAllRoles();
+                break;
+            case 'Add New Employee':
+                addNewEmployee();
+                break;
+            case 'Add New Department':
+                addNewDepartment();
+                break;
+            case 'Add New Role':
+                addNewRole();
+                break;
+            case 'Update Employee Role':
+                updateEmployeeRole();
+                break;
+            case 'Exit':
+                console.log('Goodbye!');
+                db.end();
+                return;
+        }
+    });
+};
 const viewAllEmployees = () => {
-   
     // query database
     // display results
     // show all employees
@@ -72,12 +116,6 @@ const updateEmployeeRole = () => {
 //     // update employee role in database
 //     // return confirmation message
 //     // call mainMenu()
-
-}
-
-const mainMenu = () => {
-    // ask what user wants to do
-    // call appropriate function
 }
 
 // call mainMenu()
