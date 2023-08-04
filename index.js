@@ -9,12 +9,6 @@ const db = require('./config/connection');
 // create function for main menu
 // call main menu function
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
-    database: 'employee_db'
-
 const mainMenu = () => {
     // ask what user wants to do
     inquirer.prompt([
@@ -66,9 +60,18 @@ const viewAllEmployees = () => {
 
 const viewAllDepartments = () => {
     // query database
-    // display results
-    // show all departments
-    // call mainMenu()
+    var query = `SELECT * FROM department`;
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Could not find departments');
+        } else {
+             // show all departments
+            console.table(results);
+             // call mainMenu()
+            mainMenu();
+        }
+    });
+   
 }
 
 const viewAllRoles = () => {
@@ -118,8 +121,9 @@ const updateEmployeeRole = () => {
 //     // call mainMenu()
 }
 
+mainMenu();
 // call mainMenu()
 
 // export statements
-
+module.exports = connection;
 
