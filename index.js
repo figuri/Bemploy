@@ -81,7 +81,7 @@ const viewAllEmployees = () => {
 const viewAllDepartments = () => {
     // query database
     var query = `SELECT * FROM department`;
-    connection.query(query, (err, results) => {
+    db.query(query, (err, results) => {
         if (err) {
             console.error('Could not find departments');
         } else {
@@ -97,7 +97,7 @@ const viewAllDepartments = () => {
 const viewAllRoles = () => {
     // query database
     var query = `SELECT * FROM role`;
-    connection.query(query, (err, results) => {
+    db.query(query, (err, results) => {
         if (err) {
             console.error('Could not find roles');
         } else {
